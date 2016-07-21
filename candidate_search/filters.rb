@@ -9,19 +9,35 @@ def find(id)
   @candidates.select { |candidate| candidate[:id] == id }
 end
 
-# Checks if a candidate hash meets experience standards
+# Company requirements checklist methods.
 def experienced?(candidate)
   candidate[:years_of_experience] >= 2 ? true : false
+end
+
+def enough_points?(candidate)
+  candidate[:github_points] > 100 ? true : false
+end
+
+def proper_languages?(candidate)
+  (candidate[:languages].include?("Ruby") || candidate[:languages].include?("Python")) ? true : false
+end
+
+def applied_recently?(candidate)
+  candidate[:date_applied] > 15.days.ago.to_date ? true : false
+end
+
+def old_enough?(candidate)
+  candidate[:age] > 17
 end
 
 # Algorithm for determining qualified candidates
 def qualified_candidates(candidates)
   @candidates.select do |candidate|
     experienced?(candidate) &&
-    candidate[:github_points] > 100 &&
-    (candidate[:languages].include?("Ruby") || candidate[:languages].include?("Python")) &&
-    candidate[:date_applied] > 15.days.ago.to_date &&
-    candidate[:age] > 17
+    enough_points?(candidate) &&
+    proper_languages?(candidate) &&
+    applied_recently?(candidate) &&
+    old_enough?(candidate)
   end
 end
 
